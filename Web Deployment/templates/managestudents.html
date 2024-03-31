@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="with-device-width, initial-scale=1.0">
+        <title>
+            managestudents
+        </title>
+        <link rel="stylesheet" href="{% static 'managestudents.css' %}">
+
+
+    </head>
+    <body>
+        
+
+        
+    <div id="Manage_students">
+        <div class="manage_students_wrapper">
+            <div class="manage_students_block">
+                <div class="manage_students">
+                    <h1> Manage Students</h1>
+                </div>
+
+                <div class="Add_Students">
+                    <h2> <a href=""> Add Students  </a>  </h2>
+                </div>
+                <div class="Remove_students">
+                    <h2><a href="">Remove Students </a></h2>
+                </div>
+                <div class="Shuffle_Students">
+                    <h2><a href="">Shuffle Students</a></h2>
+                </div>
+                <div class="back_button">
+                    <a href="{% url 'home' %}">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+        </body>
+
+</html>

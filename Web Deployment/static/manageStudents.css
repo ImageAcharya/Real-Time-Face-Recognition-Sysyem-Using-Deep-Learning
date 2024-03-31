@@ -1,0 +1,47 @@
+#Manage_students{
+    background-color: aquamarine;
+}
+
+#Manage_students .manage_students_block .manage_students h1{
+display: block;
+background-color: antiquewhite;
+padding: 30px;
+margin-top: 0%;
+
+}
+
+#Manage_students .manage_students_block {
+    text-align: center;
+    font-size: 25px;
+
+}
+
+#Manage_students .manage_students_block a{
+    text-decoration: none;
+}
+
+
+.Add_Students h2{
+    padding: 10px;
+    color: #fff;
+    display:inline-block;
+    background-color: rgb(189, 192, 23);
+}
+.Remove_students h2{ 
+    padding: 10px;
+    color: #fff;
+    display:inline-block;
+    background-color: rgb(189, 192, 23);
+}
+.Shuffle_Students h2{
+    padding: 10px;
+    color: #fff;
+    display:inline-block;
+    background-color: rgb(189, 192, 23);
+}  
+.back_button {
+    padding: 10px;
+    color: #fff;
+    display:inline-block;
+    background-color: rgb(189, 192, 23);
+}

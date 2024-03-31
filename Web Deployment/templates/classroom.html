@@ -1,0 +1,171 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="with-device-width, initial-scale=1.0">
+        <title>
+            Project
+        </title>
+        <link rel="stylesheet" href="{% static 'main.css' %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+
+    </head>
+    <body>
+          <section class="header">
+            <h1 style="position: fixed; width : 100%">
+                Utec Attendence Management system
+            </h1>
+
+            <div class="logout-btn">
+                <a href="{% url 'logout' %}">Logout</a>
+            </div>
+
+      
+            <nav>
+                <div class="nav-link">
+                    <ul>
+                         <li><a href="{% url 'home' %}">Home</a></li>
+                         <li><a href="{% url 'classroom' %}">Mark Attendence</a></li>
+                         <li><a href="{% url 'managestd' %}">Manage Students</a></li>
+                         <li><a href="{% url 'attendance' %}">Attendence Report</a></li>
+                         <li><a href="#">About</a></li>
+                                                
+
+                    </ul>
+                </div>
+
+            </nav>
+        </section>
+
+        <div id="classroom" class="d-flex justify-content-around" style="position:absolute;top:50%;z-index:9999;left:30%; width:50%;visibility:visible;">
+            <button style="min-width:100px;" class="btn btn-primary faculty" onclick="semester(1)">Civil</button>
+            <button style="min-width:100px;" class="btn btn-primary faculty" onclick="semester(2)">Computer</button>
+            <button style="min-width:100px;" class="btn btn-primary faculty" onclick="semester(3)">Electrical</button>
+        </div>
+
+        <div id="semester" class="d-flex justify-content-around" style="position:absolute;top:50%;z-index:9999;left:30%; width:50%;visibility:hidden;">
+        </div>
+
+        <div id="section" class="d-flex justify-content-around" style="position:absolute;top:50%;z-index:9999;left:30%; width:50%;visibility:hidden;">
+        </div>
+
+        <div id="attendance" class="d-flex flex-column align-items-center" style="position:absolute;top:20%;z-index:9999;left:25%; width:70%;visibility:hidden;">
+            <!-- <div class="row" >
+                <div class="col">
+                    <div id="vidcontainer" style="margin:0px auto; width: 500px; height: 300px; border:10px #333 solid;">
+                        <video autoplay="true" id="videoElement" style="width:100%; height:100%; background-color: #666;">
+
+                        </video>
+                    </div>
+                </div>
+                <div class="col d-flex flex-column align-items-center">
+                    <div>
+                        <canvas width="364" height="204" style="background-color:#333;"></canvas>
+                    </div>
+                    <div>
+                        <button class="btn btn-danger" onclick="snap()">Capture</button>
+                    </div>
+                </div>
+            </div> -->
+            <div class="row mt-2">
+                <form id="attendform" action="" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="faculty" id="fac">
+                    <input type="hidden" name="semester" id="seme">
+                    <input type="hidden" name="section" id="sect">
+                    <!-- <input type="hidden" name="image" id="image"> -->
+                    <button type="submit" class="btn btn-primary">Open Camera</button>
+                </form>
+            </div>
+        </div>
+          
+            
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
+    <script>
+        const classroom = document.getElementById("classroom");
+        const semesterid = document.getElementById("semester");
+        const sections = document.getElementById("section");
+        const attendance = document.getElementById("attendance");
+        
+        let section = {
+                1:4,
+                2:5,
+                3:6
+            }
+        
+        const semester = (fa) => {
+            semesterid.innerHTML = "";
+            classroom.style.visibility = "hidden";
+            semesterid.style.visibility = "visible";
+            sections.style.visibility = "hidden";
+            attendance.style.visibility = "hidden";
+            for(i=1; i<9; i++){
+                let button = document.createElement("button");
+                button.setAttribute("style", `max-width:80px;`);
+                button.setAttribute("class", `btn btn-primary`);
+                button.innerText = "semester "+(i);
+                button.setAttribute("onclick", `sectionf(${fa}, ${i})`);
+                semesterid.appendChild(button);
+            }  
+        }
+
+        const sectionf = (fa, sem) => {
+            sections.innerHTML = "";
+            classroom.style.visibility = "hidden";
+            semesterid.style.visibility = "hidden";
+            sections.style.visibility = "visible";
+            attendance.style.visibility = "hidden";
+            for(i=0; i<section[fa]; i++){
+                let button = document.createElement("button");
+                button.setAttribute("style", `min-width:100px;`);
+                button.setAttribute("class", `btn btn-primary`);
+                button.innerText = "section "+(i+1);
+                button.setAttribute("onclick", `attend(${fa}, "${sem}", ${i+1})`);
+                sections.appendChild(button);
+            }               
+        };
+
+        const attend = (fa, sem, sec) => {
+            classroom.style.visibility = "hidden";
+            semesterid.style.visibility = "hidden";
+            sections.style.visibility = "hidden";
+            attendance.style.visibility = "visible";
+            let form = document.getElementById("attendform");
+            let fac = document.getElementById("fac");
+            let seme = document.getElementById("seme");
+            let sect = document.getElementById("sect");
+            console.log(fa, sem, sec);
+            fac.setAttribute("value", fa);
+            seme.setAttribute("value", sem);
+            sect.setAttribute("value", sec);
+
+            let video = document.querySelector("#videoElement");
+
+            if(navigator.mediaDevices.getUserMedia){
+                navigator.mediaDevices.getUserMedia({video:true})
+                .then(function(stream){
+                    video.srcObject=stream;
+                })
+                .catch(function(error){
+                    console.log("Something went wrong!");
+                })
+            }
+            else{
+                console.log("getUserMedia not Supported");
+            }
+        }
+        
+        const snap=()=>{
+            let video = document.querySelector("#videoElement");
+            let canvas = document.querySelector('canvas');
+            var context = canvas.getContext('2d');
+			context.drawImage(video, 0, 0, 364, 204);
+            var dataURL = canvas.toDataURL();
+            let imagefield = document.getElementById("image");
+            imagefield.value = dataURL;
+        }
+       
+    </script>
+    </body>
+</html>
